@@ -1,21 +1,25 @@
 # SimpleService
 
-**TODO: Add description**
+This is a library to explore/play with the `def` macro and to see if remote node calls and casts
+can be abstracted in a simple way to reduce boilerplate code namely with `erpc`.
 
-## Installation
+## Setup
+The module defined below can be accessed via iex session. 
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `simple_service` to your list of dependencies in `mix.exs`:
+It prints out the current node name running the function to demonstrate remote calls.
 
 ```elixir
-def deps do
-  [
-    {:simple_service, "~> 0.1.0"}
-  ]
+defmodule Example do
+  use SimpleService, nodes: [:"1@127.0.0.1", :"2@127.0.0.1"]
+
+  defcall remote(world) do 
+    {Node.self(), world}
+  end
 end
 ```
+All we need to do is start two iex sessions and run the `remote` function in one of those sessions
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/simple_service>.
-
+```bash
+iex --name 1@127.0.0.1 --cookie monster -S mix
+iex --name 2@127.0.0.1 --cookie monster -S mix
+```
